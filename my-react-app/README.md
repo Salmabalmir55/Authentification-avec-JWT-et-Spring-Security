@@ -1,16 +1,30 @@
-# React + Vite
+# Sécura — Interface React
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Interface React de démonstration pour l’API d’authentification Spring Boot du dépôt. Elle permet de créer un compte, de se connecter et de tester les routes API protégées par JWT.
 
-Currently, two official plugins are available:
+## Captures d’écran
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+### Inscription et connexion
 
-## React Compiler
+<p align="center">
+  <img src="../screens/1.png" alt="Formulaire de création de compte" width="49%" />
+  <img src="../screens/2.png" alt="Formulaire de connexion" width="49%" />
+</p>
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Session connectée et routes API
 
-## Expanding the ESLint configuration
+<p align="center">
+  <img src="../screens/3.png" alt="Espace sécurisé après connexion" width="49%" />
+  <img src="../screens/4.png" alt="Résultats des appels aux routes hello et profile" width="49%" />
+</p>
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Démarrage
+
+Depuis ce dossier, installez les dépendances et démarrez Vite :
+
+```bash
+npm install
+npm run dev
+```
+
+Le backend Spring Boot doit également être lancé sur `http://localhost:8081`. Consultez le [README principal](../readme.md) pour les instructions complètes.

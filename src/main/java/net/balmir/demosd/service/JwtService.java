@@ -13,14 +13,15 @@ import java.util.Date;
 
 @Service
 public class JwtService {
-    @Value("${jwt.secret}")
-    private String jwtSecret;
+    private final SecretKey secretKey;
+
     @Value("${jwt.expiration}")
     private long jwtExpiration;
 
-    private SecretKey getSecretKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(jwtSecret);
-        return Keys.hmacShaKeyFor(keyBytes);
+    public JwtService(@Value("${jwt.secret:}") String jwtSecret) {
+        this.secretKey = jwtSecret.isBlank()
+                ? Jwts.SIG.HS256.key().build()
+                : Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret));
     }
 
     public String generateToken(UserDetails userDetails) {
@@ -28,7 +29,7 @@ public class JwtService {
                 .subject(userDetails.getUsername())
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + jwtExpiration))
-                .signWith(getSecretKey())
+                .signWith(secretKey)
                 .compact();
     }
 
@@ -38,7 +39,7 @@ public class JwtService {
 
     public Claims extractAllClaimsFromToken(String token) {
         return Jwts.parser()
-                .verifyWith(getSecretKey())
+                .verifyWith(secretKey)
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();

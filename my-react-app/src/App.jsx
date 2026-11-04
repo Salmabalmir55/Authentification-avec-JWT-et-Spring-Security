@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import './App.css'
 
 const API_BASE = import.meta.env.VITE_API_URL?.replace(/\/$/, '') ?? ''
@@ -38,7 +38,7 @@ function Brand({ compact = false }) {
 }
 
 function App() {
-  const [token, setToken] = useState(() => localStorage.getItem('secura-token') || '')
+  const [token, setToken] = useState('')
   const [mode, setMode] = useState('login')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -47,11 +47,6 @@ function App() {
   const [notice, setNotice] = useState(null)
   const [results, setResults] = useState({ hello: null, profile: null })
   const [apiBusy, setApiBusy] = useState('')
-
-  useEffect(() => {
-    if (!token) return
-    localStorage.setItem('secura-token', token)
-  }, [token])
 
   function changeMode(nextMode) {
     setMode(nextMode)
@@ -101,7 +96,6 @@ function App() {
   }
 
   function logout() {
-    localStorage.removeItem('secura-token')
     setToken('')
     setResults({ hello: null, profile: null })
     setNotice({ type: 'success', text: 'Vous êtes déconnecté·e.' })
@@ -122,7 +116,7 @@ function App() {
             <p>Votre session est active. Vous pouvez maintenant vérifier les routes protégées de votre API.</p>
           </div>
           <div className="session-card">
-            <div className="session-card__top"><span className="session-icon">✓</span><div><strong>Session authentifiée</strong><span>Jeton JWT enregistré dans ce navigateur</span></div><span className="live-badge"><i /> Actif</span></div>
+            <div className="session-card__top"><span className="session-icon">✓</span><div><strong>Session authentifiée</strong><span>Jeton JWT actif pour cette session</span></div><span className="live-badge"><i /> Actif</span></div>
             <div className="session-card__email"><span>COMPTE CONNECTÉ</span><strong>{email || 'Votre compte'}</strong></div>
             <div className="session-card__actions">
               <button className="api-action" onClick={() => callApi('hello')} disabled={Boolean(apiBusy)}><span className="api-action__index">01</span><span><strong>Tester /api/hello</strong><small>Vérifier l’accès à la route protégée</small></span><span className="api-action__arrow">{apiBusy === 'hello' ? '…' : '↗'}</span></button>
@@ -131,7 +125,7 @@ function App() {
             {Object.entries(results).map(([key, result]) => result && <div className={`api-result api-result--${result.type}`} key={key}><span>{key === 'hello' ? '/api/hello' : '/api/profile'}</span><code>{result.text}</code></div>)}
             <div className="session-card__footer"><span>Les appels utilisent votre jeton Bearer.</span><button className="text-button" onClick={logout}>Se déconnecter <span>↗</span></button></div>
           </div>
-          <p className="workspace__note"><span>i</span> Le jeton est conservé localement pour cette démonstration. Déconnectez-vous sur un appareil partagé.</p>
+          <p className="workspace__note"><span>i</span> Votre session se termine lorsque vous rechargez ou fermez cette page.</p>
         </section>
       ) : (
         <section className="auth-layout">
